@@ -18,6 +18,7 @@ import {
   DEFAULT_GEMINI_EMBEDDING_MODEL,
   FileDiscoveryService,
   TelemetryTarget,
+  AuthType,
 } from '@google/gemini-cli-core';
 import { Settings } from './settings.js';
 
@@ -197,6 +198,19 @@ export async function loadCliConfig(
 
   const sandboxConfig = await loadSandboxConfig(settings, argv);
 
+  // Use OpenRouter model from settings if using OpenRouter auth
+  let modelToUse = argv.model!;
+  if (
+    settings.selectedAuthType === AuthType.USE_OPENROUTER &&
+    settings.openrouterModel &&
+    !argv.model
+  ) {
+    modelToUse = settings.openrouterModel;
+  } else if (settings.selectedAuthType === AuthType.USE_OPENROUTER && !argv.model) {
+    // Default to a popular OpenRouter model if none specified
+    modelToUse = 'anthropic/claude-3.5-sonnet';
+  }
+
   return new Config({
     sessionId,
     embeddingModel: DEFAULT_GEMINI_EMBEDDING_MODEL,
@@ -243,7 +257,7 @@ export async function loadCliConfig(
     cwd: process.cwd(),
     fileDiscoveryService: fileService,
     bugCommand: settings.bugCommand,
-    model: argv.model!,
+    model: modelToUse,
     extensionContextFilePaths,
   });
 }
