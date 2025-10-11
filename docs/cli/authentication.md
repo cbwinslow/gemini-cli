@@ -1,6 +1,6 @@
 # Authentication Setup
 
-The Gemini CLI requires you to authenticate with Google's AI services. On initial startup you'll need to configure **one** of the following authentication methods:
+The Gemini CLI requires you to authenticate with AI services. On initial startup you'll need to configure **one** of the following authentication methods:
 
 1.  **Login with Google (Gemini Code Assist):**
     - Use this option to log in with your google account.
@@ -74,3 +74,39 @@ The Gemini CLI requires you to authenticate with Google's AI services. On initia
           echo 'export GOOGLE_GENAI_USE_VERTEXAI=true' >> ~/.bashrc
           source ~/.bashrc
           ```
+
+4.  **<a id="openrouter"></a>OpenRouter:**
+    - OpenRouter provides access to multiple LLM providers through a unified API, including models from Anthropic (Claude), OpenAI (GPT), Meta (Llama), Google (Gemini), and many others.
+    - To use OpenRouter:
+      - Create an account at [https://openrouter.ai/](https://openrouter.ai/)
+      - Obtain your API key from [https://openrouter.ai/keys](https://openrouter.ai/keys)
+      - Set the `OPENROUTER_API_KEY` environment variable. In the following methods, replace `YOUR_OPENROUTER_API_KEY` with your OpenRouter API key:
+        - You can temporarily set the environment variable in your current shell session using the following command:
+          ```bash
+          export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
+          ```
+        - For repeated use, you can add the environment variable to your `.env` file (located in the project directory or user home directory) or your shell's configuration file (like `~/.bashrc`, `~/.zshrc`, or `~/.profile`). For example:
+          ```bash
+          echo 'export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"' >> ~/.bashrc
+          source ~/.bashrc
+          ```
+    - **Selecting a Model:**
+      - OpenRouter provides access to many different models. You can specify which model to use in your settings file (`~/.gemini/settings.json`):
+        ```json
+        {
+          "selectedAuthType": "openrouter",
+          "openrouterModel": "anthropic/claude-3.5-sonnet"
+        }
+        ```
+      - Popular model options include:
+        - `anthropic/claude-3.5-sonnet` - Latest Claude model, excellent for coding
+        - `anthropic/claude-3-opus` - Most capable Claude model
+        - `openai/gpt-4-turbo` - Latest GPT-4 Turbo
+        - `google/gemini-pro-1.5` - Google's Gemini Pro
+        - `meta-llama/llama-3.1-70b-instruct` - Meta's Llama 3.1
+      - See the full list of available models at [https://openrouter.ai/models](https://openrouter.ai/models)
+      - If no model is specified in settings, the default is `anthropic/claude-3.5-sonnet`
+    - You can also specify the model via the command line:
+      ```bash
+      gemini --model anthropic/claude-3-opus
+      ```

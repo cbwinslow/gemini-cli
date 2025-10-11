@@ -142,7 +142,7 @@ export class OpenRouterContentGenerator implements ContentGenerator {
               if (parsed.choices?.[0]?.delta?.content) {
                 yield this.convertStreamChunkToResponse(parsed);
               }
-            } catch (e) {
+            } catch (_e) {
               // Skip invalid JSON lines
             }
           }

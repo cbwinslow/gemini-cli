@@ -40,13 +40,35 @@ You are now ready to use the Gemini CLI!
 
 ### For advanced use or increased limits:
 
-If you need to use a specific model or require a higher request capacity, you can use an API key:
+If you need to use a specific model or require a higher request capacity, you have several options:
+
+#### Use an API key:
 
 1. Generate a key from [Google AI Studio](https://aistudio.google.com/apikey).
 2. Set it as an environment variable in your terminal. Replace `YOUR_API_KEY` with your generated key.
 
    ```bash
    export GEMINI_API_KEY="YOUR_API_KEY"
+   ```
+
+#### Use OpenRouter for access to multiple LLM providers:
+
+OpenRouter provides unified access to models from Anthropic (Claude), OpenAI (GPT), Meta (Llama), Google (Gemini), and many others.
+
+1. Create an account and get your API key from [OpenRouter](https://openrouter.ai/keys).
+2. Set it as an environment variable:
+
+   ```bash
+   export OPENROUTER_API_KEY="YOUR_OPENROUTER_API_KEY"
+   ```
+
+3. Select your preferred model by adding to your `~/.gemini/settings.json`:
+
+   ```json
+   {
+     "selectedAuthType": "openrouter",
+     "openrouterModel": "anthropic/claude-3.5-sonnet"
+   }
    ```
 
 For other authentication methods, including Google Workspace accounts, see the [authentication](./docs/cli/authentication.md) guide.
