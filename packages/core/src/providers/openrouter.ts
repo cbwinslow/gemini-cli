@@ -169,7 +169,7 @@ export class OpenRouterContentGenerator implements ContentGenerator {
   async embedContent(
     _request: EmbedContentParameters,
   ): Promise<EmbedContentResponse> {
-    throw new Error('OpenRouter does not support embedContent');
+    throw new Error('OpenRouter does not support content embedding (embedContent). Please use a different provider that supports embeddings, such as Google Vertex AI or OpenAI. See the documentation for more information.');
   }
 
   private convertToOpenRouterRequest(
