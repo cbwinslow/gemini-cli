@@ -54,6 +54,7 @@ export interface Settings {
   bugCommand?: BugCommandSettings;
   checkpointing?: CheckpointingSettings;
   autoConfigureMaxOldSpaceSize?: boolean;
+  openrouterModel?: string;
 
   // Git-aware file filtering settings
   fileFiltering?: {
