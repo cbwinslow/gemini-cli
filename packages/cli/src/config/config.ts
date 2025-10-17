@@ -199,7 +199,7 @@ export async function loadCliConfig(
   const sandboxConfig = await loadSandboxConfig(settings, argv);
 
   // Use OpenRouter model from settings if using OpenRouter auth
-  let modelToUse = argv.model!;
+  let modelToUse = argv.model || undefined;
   if (
     settings.selectedAuthType === AuthType.USE_OPENROUTER &&
     settings.openrouterModel &&
