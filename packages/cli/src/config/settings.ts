@@ -55,6 +55,11 @@ export interface Settings {
   checkpointing?: CheckpointingSettings;
   autoConfigureMaxOldSpaceSize?: boolean;
   openrouterModel?: string;
+  customOpenAIConfig?: {
+    apiKey?: string;
+    baseUrl?: string;
+    model?: string;
+  };
 
   // Git-aware file filtering settings
   fileFiltering?: {

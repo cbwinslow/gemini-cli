@@ -211,6 +211,15 @@ export async function loadCliConfig(
     modelToUse = 'anthropic/claude-3.5-sonnet';
   }
 
+  // Use Custom OpenAI model from settings if using Custom OpenAI auth
+  if (
+    settings.selectedAuthType === AuthType.USE_CUSTOM_OPENAI &&
+    settings.customOpenAIConfig?.model &&
+    !argv.model
+  ) {
+    modelToUse = settings.customOpenAIConfig.model;
+  }
+
   return new Config({
     sessionId,
     embeddingModel: DEFAULT_GEMINI_EMBEDDING_MODEL,
@@ -259,6 +268,7 @@ export async function loadCliConfig(
     bugCommand: settings.bugCommand,
     model: modelToUse,
     extensionContextFilePaths,
+    customOpenAIConfig: settings.customOpenAIConfig,
   });
 }
 

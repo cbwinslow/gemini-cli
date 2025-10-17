@@ -36,6 +36,7 @@ export function AuthDialog({
     { label: 'Gemini API Key (AI Studio)', value: AuthType.USE_GEMINI },
     { label: 'Vertex AI', value: AuthType.USE_VERTEX_AI },
     { label: 'OpenRouter', value: AuthType.USE_OPENROUTER },
+    { label: 'Custom OpenAI Provider', value: AuthType.USE_CUSTOM_OPENAI },
   ];
 
   let initialAuthIndex = items.findIndex(

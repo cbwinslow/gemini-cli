@@ -40,6 +40,7 @@ export enum AuthType {
   USE_GEMINI = 'gemini-api-key',
   USE_VERTEX_AI = 'vertex-ai',
   USE_OPENROUTER = 'openrouter',
+  USE_CUSTOM_OPENAI = 'custom-openai',
 }
 
 export type ContentGeneratorConfig = {
@@ -48,12 +49,16 @@ export type ContentGeneratorConfig = {
   vertexai?: boolean;
   authType?: AuthType | undefined;
   openrouterBaseUrl?: string;
+  customOpenAIBaseUrl?: string;
 };
 
 export async function createContentGeneratorConfig(
   model: string | undefined,
   authType: AuthType | undefined,
-  config?: { getModel?: () => string },
+  config?: { 
+    getModel?: () => string;
+    getCustomOpenAIConfig?: () => { apiKey?: string; baseUrl?: string; model?: string } | undefined;
+  },
 ): Promise<ContentGeneratorConfig> {
   const geminiApiKey = process.env.GEMINI_API_KEY;
   const googleApiKey = process.env.GOOGLE_API_KEY;
@@ -106,6 +111,19 @@ export async function createContentGeneratorConfig(
     return contentGeneratorConfig;
   }
 
+  if (authType === AuthType.USE_CUSTOM_OPENAI) {
+    // Custom OpenAI provider will be configured from settings
+    const customConfig = config?.getCustomOpenAIConfig?.();
+    if (customConfig) {
+      contentGeneratorConfig.apiKey = customConfig.apiKey;
+      contentGeneratorConfig.customOpenAIBaseUrl = customConfig.baseUrl;
+      if (customConfig.model) {
+        contentGeneratorConfig.model = customConfig.model;
+      }
+    }
+    return contentGeneratorConfig;
+  }
+
   return contentGeneratorConfig;
 }
 
@@ -143,6 +161,20 @@ export async function createContentGenerator(
       config.apiKey,
       config.model,
       config.openrouterBaseUrl,
+    );
+  }
+
+  if (config.authType === AuthType.USE_CUSTOM_OPENAI) {
+    if (!config.apiKey) {
+      throw new Error('Custom OpenAI provider API key is required');
+    }
+    if (!config.customOpenAIBaseUrl) {
+      throw new Error('Custom OpenAI provider base URL is required');
+    }
+    return new OpenRouterContentGenerator(
+      config.apiKey,
+      config.model,
+      config.customOpenAIBaseUrl,
     );
   }
 

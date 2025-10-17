@@ -130,6 +130,11 @@ export interface ConfigParameters {
   bugCommand?: BugCommandSettings;
   model: string;
   extensionContextFilePaths?: string[];
+  customOpenAIConfig?: {
+    apiKey?: string;
+    baseUrl?: string;
+    model?: string;
+  };
 }
 
 export class Config {
@@ -170,6 +175,11 @@ export class Config {
   private readonly extensionContextFilePaths: string[];
   private modelSwitchedDuringSession: boolean = false;
   flashFallbackHandler?: FlashFallbackHandler;
+  private readonly customOpenAIConfig?: {
+    apiKey?: string;
+    baseUrl?: string;
+    model?: string;
+  };
 
   constructor(params: ConfigParameters) {
     this.sessionId = params.sessionId;
@@ -211,6 +221,7 @@ export class Config {
     this.bugCommand = params.bugCommand;
     this.model = params.model;
     this.extensionContextFilePaths = params.extensionContextFilePaths ?? [];
+    this.customOpenAIConfig = params.customOpenAIConfig;
 
     if (params.contextFileName) {
       setGeminiMdFilename(params.contextFileName);
@@ -267,6 +278,10 @@ export class Config {
 
   getModel(): string {
     return this.contentGeneratorConfig?.model || this.model;
+  }
+
+  getCustomOpenAIConfig(): { apiKey?: string; baseUrl?: string; model?: string } | undefined {
+    return this.customOpenAIConfig;
   }
 
   setModel(newModel: string): void {

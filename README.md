@@ -71,6 +71,23 @@ OpenRouter provides unified access to models from Anthropic (Claude), OpenAI (GP
    }
    ```
 
+#### Use a Custom OpenAI-Compatible Provider:
+
+Connect to any OpenAI-compatible API (Ollama, LM Studio, local LLMs, etc.):
+
+1. Configure in your `~/.gemini/settings.json`:
+
+   ```json
+   {
+     "selectedAuthType": "custom-openai",
+     "customOpenAIConfig": {
+       "apiKey": "your-api-key",
+       "baseUrl": "http://localhost:11434/v1",
+       "model": "llama3.1:70b"
+     }
+   }
+   ```
+
 For other authentication methods, including Google Workspace accounts, see the [authentication](./docs/cli/authentication.md) guide.
 
 ## Examples

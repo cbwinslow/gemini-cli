@@ -237,7 +237,7 @@ describe('OpenRouterContentGenerator', () => {
             },
           ],
         }),
-      ).rejects.toThrow('OpenRouter does not support embedContent');
+      ).rejects.toThrow('OpenRouter does not support content embedding');
     });
   });
 });

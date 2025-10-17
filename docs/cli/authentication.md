@@ -110,3 +110,59 @@ The Gemini CLI requires you to authenticate with AI services. On initial startup
       ```bash
       gemini --model anthropic/claude-3-opus
       ```
+
+5.  **<a id="custom-openai"></a>Custom OpenAI-Compatible Provider:**
+    - Use this option to connect to any OpenAI-compatible API endpoint (e.g., local LLMs, custom deployments, or other providers).
+    - Configure in your settings file (`~/.gemini/settings.json`):
+      ```json
+      {
+        "selectedAuthType": "custom-openai",
+        "customOpenAIConfig": {
+          "apiKey": "your-api-key-here",
+          "baseUrl": "https://api.your-provider.com/v1",
+          "model": "your-model-name"
+        }
+      }
+      ```
+    - **Configuration Options:**
+      - `apiKey`: Your API key for the custom provider
+      - `baseUrl`: The base URL of the OpenAI-compatible API endpoint
+      - `model`: The model name to use (e.g., `gpt-4`, `llama-3-70b`, etc.)
+    - **Examples:**
+      - **Local Ollama**: 
+        ```json
+        {
+          "selectedAuthType": "custom-openai",
+          "customOpenAIConfig": {
+            "apiKey": "ollama",
+            "baseUrl": "http://localhost:11434/v1",
+            "model": "llama3.1:70b"
+          }
+        }
+        ```
+      - **LM Studio**:
+        ```json
+        {
+          "selectedAuthType": "custom-openai",
+          "customOpenAIConfig": {
+            "apiKey": "lm-studio",
+            "baseUrl": "http://localhost:1234/v1",
+            "model": "local-model"
+          }
+        }
+        ```
+      - **Anyscale Endpoints**:
+        ```json
+        {
+          "selectedAuthType": "custom-openai",
+          "customOpenAIConfig": {
+            "apiKey": "your-anyscale-key",
+            "baseUrl": "https://api.endpoints.anyscale.com/v1",
+            "model": "meta-llama/Llama-3-70b-chat-hf"
+          }
+        }
+        ```
+    - You can override the model via command line:
+      ```bash
+      gemini --model different-model-name
+      ```

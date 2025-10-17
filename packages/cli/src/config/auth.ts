@@ -42,5 +42,11 @@ export const validateAuthMethod = (authMethod: string): string | null => {
     return null;
   }
 
+  if (authMethod === AuthType.USE_CUSTOM_OPENAI) {
+    // Custom OpenAI provider requires configuration in settings.json
+    // We'll validate this in the content generator config creation
+    return null;
+  }
+
   return 'Invalid auth method selected.';
 };
