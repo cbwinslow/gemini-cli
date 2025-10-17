@@ -231,23 +231,18 @@ export class OpenRouterContentGenerator implements ContentGenerator {
     }
     if (content && typeof content === 'object' && 'parts' in content) {
       const parts = (content as Content).parts || [];
-      return this.extractTextFromParts(parts);
-    }
-    return '';
-  }
-
-  private convertParts(parts: Part[]): string | Array<{ type: string; text?: string; image_url?: string }> {
-    // For simplicity, convert to text. More complex implementations could handle images
-    return this.extractTextFromParts(parts);
-  }
-
-  private extractTextFromParts(parts: Part[]): string {
-    return parts
-      .map(part => {
-        if ('text' in part && part.text) {
-          return part.text;
+      private extractTextFromParts(parts: Part[]): string {
+        const texts: string[] = [];
+        for (const part of parts) {
+          if (typeof (part as any)?.text === 'string' && (part as any).text.length) {
+            texts.push((part as any).text);
+            continue;
+          }
+          // Silently skip unsupported Gemini-specific parts for OpenRouter chat
+          // e.g., functionCall, functionResponse, inlineData, fileData, etc.
         }
-        if ('functionCall' in part) {
+        return texts.join('\n');
+      }
           return `[Function Call: ${part.functionCall?.name}]`;
         }
         if ('functionResponse' in part) {
