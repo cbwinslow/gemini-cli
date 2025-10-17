@@ -69,7 +69,7 @@ export class OpenRouterContentGenerator implements ContentGenerator {
     const response = await fetch(`${this.baseUrl}/chat/completions`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'https://github.com/cbwinslow/gemini-cli',
         'X-Title': 'Gemini CLI',
@@ -78,8 +78,18 @@ export class OpenRouterContentGenerator implements ContentGenerator {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`OpenRouter API error: ${response.status} - ${errorText}`);
+      const requestId = response.headers.get('x-request-id') || response.headers.get('x-openrouter-id') || '';
+      const raw = await response.text();
+      let message = raw;
+      try {
+        const parsed = JSON.parse(raw);
+        // OpenAI-compatible error shape
+        message = parsed.error?.message || parsed.message || raw;
+      } catch {
+        // keep raw
+      }
+      const truncated = message.length > 1000 ? message.slice(0, 1000) + '…' : message;
+      throw new Error(`OpenRouter API error: ${response.status}${requestId ? ` (request-id: ${requestId})` : ''} - ${truncated}`);
     }
 
     const data: OpenRouterResponse = await response.json();
